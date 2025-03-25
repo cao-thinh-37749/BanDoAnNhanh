@@ -1,0 +1,113 @@
+﻿@model IEnumerable<WebFood.Models.SanPham>
+
+
+<h1 class="title text-center">Sản phẩm yêu thích</h1>
+<!-- Nút quay lại -->
+<div class="text-left mb-4">
+    <a href="@Url.Action("Index","Home")" class="btn btn-outline-secondary btn-lg">
+        <i class="fa fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+<hr style="margin:1.5rem" />
+@* Hiển thị thông báo nếu có *@
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info" style="text-align: center;">
+        @TempData["Message"]
+    </div>
+
+    <script>
+        // Tự động đóng thông báo sau 5 giây (5000 mili giây)
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 5000); // 5000 milliseconds = 5 seconds
+    </script>
+}
+
+<div class="category-tab">
+    <div class="col-sm-12">
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="favorite-items">
+                <div class="row">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var sanPham in Model)
+                        {
+                            <div class="col-sm-4">
+                                <div class="product-image-wrapper">
+                                    <div class="single-products">
+                                        <div class="productinfo text-center">
+
+                                            <img style="height: 200px;" src="@Url.Content(sanPham.HinhAnh)" alt="@sanPham.TenSanPham" />
+                                            <h2>@sanPham.Gia.ToString("C")</h2>
+                                            <p>@sanPham.TenSanPham</p>
+                                            <form asp-action="Add" asp-controller="GioHang" method="post" style="display: inline;">
+                                                <input type="hidden" name="maSanPham" value="@sanPham.MaSanPham" />
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-shopping-cart"></i> Thêm vào Giỏ Hàng
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                        <div class="choose">
+                                            <ul class="nav nav-pills nav-justified">
+                                                <li>
+                                                    <a href="@Url.Action("Delete", "SanPhamYeuThich", new { MaSanPham = sanPham.MaSanPham })" class="btn btn-danger">
+                                                        <i class="fa fa-trash"></i> Xóa
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Details", "Home", new { MaSanPham = sanPham.MaSanPham })">
+                                                        <i class="fa fa-plus-square"></i> Chi Tiết
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-sm-12 text-center">
+                            <h4>Không có sản phẩm yêu thích nào.</h4>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    h1.text-center {
+        font-size: 2.5rem; /* Kích thước chữ lớn */
+        font-weight: bold; /* Làm đậm tiêu đề */
+        color: #2c3e50; /* Màu sắc tối, dễ nhìn */
+        text-transform: uppercase; /* Chữ in hoa */
+        margin-bottom: 1.5rem; /* Khoảng cách phía dưới */
+        margin: 1.5rem;
+        letter-spacing: 2px; /* Tăng khoảng cách giữa các chữ */
+        font-family: 'Arial', sans-serif; /* Font chữ hiện đại */
+        text-align: center; /* Căn giữa */
+        padding: 10px 0; /* Khoảng cách trên và dưới */
+        border-bottom: 2px solid #e74c3c; /* Thêm đường viền dưới màu đỏ */
+    }
+
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 15px;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+</style>

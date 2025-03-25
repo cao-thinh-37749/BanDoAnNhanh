@@ -1,0 +1,128 @@
+﻿@model IEnumerable<WebFood.Models.ChiTietDonDatHang>
+@{
+    ViewData["Title"] = "Lịch Sử Đơn Hàng";
+}
+
+<h2 class="text-center mb-4">Lịch Sử Đơn Hàng</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-center mt-5">Không có đơn hàng nào trong lịch sử.</p>
+}
+else
+{
+    <div style="margin: 1.5rem;" class="table-responsive mt-4">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Hình</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng</th>
+                    <th>Giá</th>
+                    <th>Ngày Thanh Toán</th>
+                    <th>Ngày Giao</th>
+                    <th>Ngày Nhận</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><img class="img-fluid" style="width: 50px;" src="@Url.Content(item.SanPham!.HinhAnh)" alt="@item.SanPham.TenSanPham"></td>
+                        <td>@item.SanPham?.TenSanPham</td>
+                        <td>@item.SoLuong</td>
+                        <td>@item.Gia.ToString("C")</td>
+                        <td>@item.NgayThanhToan?.ToString("dd/MM/yyyy \nHH:mm")</td>
+                        <td>@item.NgayGiao?.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.NgayNhan?.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><span class="badge badge-success">@item.TrangThai</span></td>
+                        <td>
+                            <form asp-action="Add" asp-controller="GioHang" method="post" class="text-center">
+                                <input type="hidden" name="maSanPham" value="@item.MaSanPham" />
+                                <button type="submit" class="btn btn-primary add-to-cart align-top" style="color: white;">
+                                    <i class="fa fa-shopping-cart"></i> Mua Lại
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<style>
+    h2.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        border-bottom: 2px solid #e74c3c;
+    }
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+
+        background-color: #f9f9f9;
+    }
+
+    .badge {
+        padding: 8px 12px;
+        font-size: 1em;
+        border-radius: 12px;
+        color: white;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-secondary {
+        background-color: #6c757d;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 5px 15px;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    img.img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+</style>

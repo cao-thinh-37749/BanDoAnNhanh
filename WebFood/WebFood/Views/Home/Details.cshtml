@@ -1,0 +1,53 @@
+﻿@model WebFood.Models.SanPham
+
+<div class="container" style="margin-bottom:20px;">
+    <div class="row">
+
+        <div class="col-md-6">
+            <!-- Product Image -->
+            <img style="width:100%; height:auto;" src="@Url.Content(Model.HinhAnh)" alt="@Model.TenSanPham" />
+        </div>
+        <div class="col-md-6">
+            <!-- Product Details -->
+            <h2>@Model.TenSanPham</h2>
+            <h4><strong>Giá:</strong> @Model.Gia.ToString("C")</h4>
+            <p><strong>Mô tả:</strong> @Model.MoTa</p>
+            <p><strong>Số lượng còn:</strong> @Model.SoLuong</p>
+            <p><strong>Danh mục:</strong> @Model.DanhMuc</p>
+
+            <!-- Action Buttons -->
+            <div class="choose">
+                <ul class="nav nav-pills nav-justified">
+
+                    <!-- Thêm vào Giỏ Hàng -->
+                    <li>
+                        <form asp-action="Add" asp-controller="GioHang" method="post" style="display: inline;">
+                            <input type="hidden" name="maSanPham" value="@Model.MaSanPham" />
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fa fa-shopping-cart"></i> Thêm vào Giỏ Hàng
+                            </button>
+                        </form>
+                    </li>
+
+                    <!-- Yêu Thích -->
+                    <li>
+                        <form id="add-to-favorites-@Model.MaSanPham" action="@Url.Action("Add", "SanPhamYeuThich")" method="post" style="display: inline;">
+                            <input type="hidden" name="maSanPham" value="@Model.MaSanPham" />
+                            <button type="submit" class="btn btn-danger btn-block">
+                                <i class="fa fa-heart"></i> Yêu Thích
+                            </button>
+                        </form>
+                    </li>
+
+                    <!-- Trở Về -->
+                    <li>
+                        <button onclick="history.back();" class="btn btn-secondary btn-block">
+                            <i class="fa fa-arrow-left"></i> Trở Về
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

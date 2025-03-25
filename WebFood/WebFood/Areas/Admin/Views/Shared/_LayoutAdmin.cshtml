@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang quản trị Quốc Thịnh Food">
+    <meta name="author" content="">
+    <title>Admin | Quốc Thịnh Food</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/css/admin-style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <style>
+        /* Avatar styles */
+        .sidebar-header img {
+            width: 23px; /* Kích thước avatar */
+            height: 23px; /* Giữ kích thước vuông */
+            border-radius: 50%; /* Làm tròn hình ảnh */
+            object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+            margin-right: 5px; /* Khoảng cách với email */
+            vertical-align: middle; /* Căn giữa dọc với text */
+
+        }
+
+        .sidebar-header div a {
+            display: flex; /* Hiển thị inline với avatar */
+            align-items: center; /* Căn giữa dọc các phần tử con */
+            color: white;
+            text-decoration: none;
+            padding: 10px 0;
+            transition: color 0.3s;
+        }
+
+            .sidebar-header div a:hover {
+                color: #1abc9c; /* Màu khi hover */
+            }
+
+        /* Sidebar */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+            transition: all 0.3s;
+        }
+
+            #sidebar a {
+                color: white;
+                font-size: 16px;
+                padding: 10px 20px;
+                display: block;
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+                #sidebar a:hover {
+                    background-color: #1abc9c;
+                    color: white;
+                }
+
+            #sidebar .sidebar-header h3 {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #fff;
+            }
+
+            #sidebar ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+                #sidebar ul li {
+                    border-bottom: 1px solid #444;
+                }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            background-color: #333;
+            border: none;
+            width: 250px;
+        }
+
+            .dropdown-menu li a {
+                color: white;
+                font-size: 16px;
+                padding: 10px 20px;
+                text-decoration: none;
+            }
+
+                .dropdown-menu li a:hover {
+                    background-color: #1abc9c;
+                }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-toggle::after {
+            content: '\f0d7';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-left: 10px;
+        }
+
+        /* Main content */
+        #content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+            #content header {
+                background-color: #fff;
+                padding: 15px 30px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h3>Quốc Thịnh Food</h3>
+            @if (!string.IsNullOrEmpty(ViewBag.Email))
+            {
+                <div>
+                    <a href='@Url.Action("Edit", "LoginAdmin", new { area = "Admin", emailAdmin = ViewBag.Email })'>
+                        <img src="@Url.Content(ViewBag.Hinh)" alt="Avatar của @ViewBag.Hinh" />
+                        <span>@ViewBag.Email</span>
+                    </a>
+                </div>
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("Index", "HomeAdmin", new { area = "Admin"})"><i class="fa fa-tachometer-alt menu-icon"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Index", "SanPhamAdmin",  new { area = "Admin"})"><i class="fa fa-cogs menu-icon"></i> Quản lý sản phẩm</a></li>
+                    <li><a href="@Url.Action("Index", "DonHangAdmin", new { area = "Admin"})"><i class="fa fa-box menu-icon"></i> Quản lý đơn hàng</a></li>
+                    <li><a href="@Url.Action("Index", "KhachHangAdmin", new { area = "Admin"})"><i class="fa fa-users menu-icon"></i> Quản lý khách hàng</a></li>
+                    <li><a href="@Url.Action("Index", "Roles", new { area = "Admin"})"><i class="fa fa-users menu-icon"></i> Quản lý danh sách vai trò</a></li>
+                    @* <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-chart-line menu-icon"></i> Báo cáo
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("MonthlyImport", "Admin")">Thống kê hàng nhập Kho</a></li>
+                            <li><a href="@Url.Action("MonthlyImport", "Admin")">Thống kê hàng mới cập nhật</a></li>
+                            <li><a href="@Url.Action("WeeklyOrders", "Admin")">Thống kê đơn hàng bán trong tuần</a></li>
+                            <li><a href="@Url.Action("WeeklyRevenue", "Admin")">Thống kê tổng tiền của đơn hàng</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="@Url.Action("Settings", "Admin")"><i class="fa fa-cogs menu-icon"></i> Cài đặt</a></li> *@
+                    <li><a href="@Url.Action("LogoutAd", "LoginAdmin", new { area = "Admin" })"><i class="fa fa-sign-out-alt menu-icon"></i> Đăng xuất</a></li>
+                </ul>
+            }
+
+        </div>
+       
+    </div>
+
+    <!-- Main content -->
+    <div id="content">
+        <!-- Header with user info -->
+        
+
+        <!-- Page content -->
+        <div class="">
+            <div class="row">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Quốc Thịnh Food. All Rights Reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/js/jquery.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/main.js"></script>
+</body>
+
+</html>

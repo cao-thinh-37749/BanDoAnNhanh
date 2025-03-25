@@ -1,0 +1,145 @@
+﻿@model WebFood.Models.KhachHang
+
+@{
+    Layout = null; // Không sử dụng layout
+}
+
+<div class="register-container">
+    <h2>Đăng Ký</h2>
+
+    <form asp-action="Register" method="post">
+
+        <div class="form-group">
+            <label for="HoTen">Họ và tên:</label>
+            <input type="text" asp-for="HoTen" placeholder="Nhập Họ Tên" required oninput="this.nextElementSibling.textContent=''" />@*oninput="this.nextElementSibling.textContent=''"  => Tắt thông báo lỗi *@
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" asp-for="Email" placeholder="Nhập Email" required oninput="this.nextElementSibling.textContent=''" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="MatKhau">Mật khẩu:</label>
+            <input type="password" asp-for="PasswordHash" placeholder="Nhập Mật Khẩu" required oninput="this.nextElementSibling.textContent=''" />
+            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="SoDienThoai">Số điện thoại:</label>
+            <input type="text" asp-for="PhoneNumber" placeholder="Nhập Số Điện Thoại" required oninput="this.nextElementSibling.textContent=''" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="DiaChi">Địa chỉ:</label>
+            <input type="text" asp-for="DiaChi" placeholder="Nhập Địa Chỉ" required oninput="this.nextElementSibling.textContent=''" />
+            <span asp-validation-for="DiaChi" class="text-danger"></span>
+        </div>
+
+        <div class="validation-summary @(ViewData.ModelState.IsValid ? "" : "visible")">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        <button type="submit" class="btn">Đăng Ký</button>
+    </form>
+
+    <div class="footer-links">
+        <a href="@Url.Action("Login", "Login")">Đã có tài khoản? Đăng nhập</a>
+    </div>
+</div>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef;
+        margin: 0;
+        padding: 0;
+    }
+
+    .register-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .footer-links {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+        .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .footer-links a:hover {
+                text-decoration: underline;
+            }
+
+    .validation-summary.visible {
+        display: block !important;
+    }
+
+    .validation-summary ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .text-danger {
+        color: red !important;
+        font-size: 14px;
+    }
+</style>

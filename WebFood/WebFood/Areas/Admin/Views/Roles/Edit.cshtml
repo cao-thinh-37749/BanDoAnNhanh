@@ -1,0 +1,114 @@
+﻿@model RoleViewModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container">
+    <h2 class="title">Sửa Vai Trò</h2>
+
+    <div class="form-container">
+        <form method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <div class="form-group">
+                <label for="roleName">Tên Vai Trò</label>
+                <input type="text" name="roleName" value="@Model.Name" class="form-control" required />
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-update">Cập Nhật</button>
+                <button type="button" class="btn btn-cancel" onclick="window.history.back()">Hủy</button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<style>
+
+    .container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-container {
+        text-align: left;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .btn-update {
+        background: #28a745;
+        color: white;
+        margin-right: 10px;
+    }
+
+        .btn-update:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+    .btn-cancel {
+        background: #dc3545;
+        color: white;
+    }
+
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+</style>

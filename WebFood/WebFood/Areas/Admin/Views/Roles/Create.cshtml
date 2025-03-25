@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center text-primary mb-4">Thêm vai trò</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="roleName" class="form-label fw-bold">Tên vai trò</label>
+                <input type="text" name="roleName" class="form-control border-primary shadow-sm" required />
+            </div>
+            <br />
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p class="mb-0">@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success px-4">Thêm</button>
+                <button type="button" class="btn btn-secondary px-4" onclick="window.history.back()">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Định dạng tổng thể */
+    body {
+        background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    }
+
+
+    /* Card Form */
+    .card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+        background: #ffffff;
+        padding: 30px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Tiêu đề */
+    h2 {
+        font-weight: 700;
+        color: #007bff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Input */
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #007bff;
+        padding: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+        background: #fff;
+    }
+
+        .form-control:focus {
+            border-color: #0056b3;
+            box-shadow: 0px 0px 10px rgba(0, 91, 187, 0.5);
+        }
+
+    /* Button */
+    .btn {
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Button Thêm */
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #218838);
+        border: none;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            transform: scale(1.05);
+        }
+
+    /* Button Hủy */
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        border: none;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #545b62, #4e555b);
+            transform: scale(1.05);
+        }
+
+    /* Hiệu ứng nhỏ khi hover vào form */
+    .card:hover {
+        transform: scale(1.02);
+    }
+</style>

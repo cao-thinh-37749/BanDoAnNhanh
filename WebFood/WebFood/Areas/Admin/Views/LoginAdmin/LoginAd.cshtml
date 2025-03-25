@@ -1,0 +1,158 @@
+﻿@model WebFood.Models.KhachHang
+
+@{
+    Layout = null; // Không sử dụng layout
+}
+
+<div class="login-container">
+    <h2>Đăng Nhập Admin</h2>
+
+    @if (!String.IsNullOrEmpty(ViewData["SuccessMessage"] as string))
+    {
+        <div class="alert alert-success">
+            @ViewData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="LoginAd" method="post">
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" name="email" class="form-control" placeholder="Nhập email" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="MatKhau">Mật khẩu:</label>
+            <input type="password" name="matkhau" class="form-control" placeholder="Nhập mật khẩu" required />
+            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+        </div>
+
+        <a href="@Url.Action("QuenMatKhau", "LoginAdmin", new { area = "Admin" })">Quên mật khẩu </a>
+
+        <div class="validation-summary @(!ViewData.ModelState.IsValid ? "visible" : "")">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        <button type="submit" class="btn">Đăng Nhập</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".form-control").on("input", function () {
+            // Ẩn lỗi liên quan đến trường nhập hiện tại
+            $(this).next(".text-danger").text("");
+
+            // Ẩn thông báo lỗi tổng quát
+            $(".validation-summary").removeClass("visible").empty();
+        });
+    });
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .validation-summary {
+        margin-top: 10px;
+    }
+
+    .footer-links {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+        .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .footer-links a:hover {
+                text-decoration: underline;
+            }
+
+    .validation-summary-errors {
+        background-color: #f8d7da; /* Màu nền đỏ nhạt */
+        color: #721c24; /* Màu chữ đỏ đậm */
+        padding: 10px;
+        border: 1px solid #f5c6cb; /* Đường viền màu đỏ nhạt */
+        border-radius: 5px; /* Bo tròn các góc */
+        margin-bottom: 20px; /* Khoảng cách dưới thông báo */
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .validation-summary-errors li {
+            margin-bottom: 5px; /* Khoảng cách giữa các lỗi */
+        }
+
+        .validation-summary-errors a {
+            color: #721c24; /* Màu chữ của liên kết */
+            text-decoration: none;
+        }
+
+            .validation-summary-errors a:hover {
+                text-decoration: underline;
+            }
+
+</style>

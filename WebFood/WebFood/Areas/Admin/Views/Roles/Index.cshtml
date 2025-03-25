@@ -1,0 +1,167 @@
+﻿@model IEnumerable<RoleViewModel>
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center title">Danh sách vai trò</h2>
+    <div class="d-flex justify-content-center mb-3">
+        <a href="@Url.Action("Create")" class="btn btn-primary shadow-sm add-btn">
+            <i class="fas fa-plus-circle"></i> Thêm vai trò
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="table-header">
+                <tr>
+                    <th>ID</th>
+                    <th>Tên vai trò</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.Id</td>
+                        <td>@role.Name</td>
+                        <td>
+                            <div Id="action" class="action-buttons">
+                                <a asp-area="Admin" asp-action="Edit" asp-controller="Roles" asp-route-id="@role.Id" class="btn btn-warning btn-sm rounded-pill">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                                <form method="post" action="@Url.Action("Delete", new { id = role.Id })" class="delete-form">
+                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                </form>
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                    <strong>@TempData["ErrorMessage"]</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+        </table>
+    </div>
+
+</div>
+
+<style>
+    /* 🌟 Tổng thể giao diện */
+    body {
+        background: linear-gradient(120deg, #f8f9fa, #e3e6eb);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* 🌟 Tiêu đề */
+    .title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+
+    /* 🌟 Nút "Thêm vai trò" */
+    .add-btn {
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border: none;
+        transition: 0.3s;
+        color: white;
+    }
+
+        .add-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #003d82);
+            transform: scale(1.05);
+            box-shadow: 0px 4px 12px rgba(0, 91, 255, 0.3);
+        }
+
+    /* 🌟 Bảng danh sách */
+    .table {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 🌟 Header bảng */
+    .table-header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        font-weight: 600;
+    }
+
+    .table th, .table td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    /* 🌟 Hàng xen kẽ */
+    .table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* 🌟 Hover bảng */
+    .table tbody tr:hover {
+        background-color: #e3e6eb;
+        transition: 0.3s;
+    }
+
+    /* 🌟 Nút hành động */
+    /* Căn chỉnh nút "Sửa" và "Xóa" nằm ngang nhau */
+    .action-buttons {
+        display: flex;
+        gap: 10px; /* Khoảng cách giữa các nút */
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Đảm bảo nút Xóa không bị giãn ra toàn bộ form */
+    .delete-form {
+        margin: 0;
+        display: inline-block;
+    }
+
+
+    #action {
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 25px;
+        transition: 0.3s;
+        display: inline-block;
+    }
+
+    #btn-warning {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+        border: none;
+    }
+
+        #btn-warning:hover {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            transform: scale(1.05);
+            box-shadow: 0px 4px 12px rgba(243, 156, 18, 0.3);
+        }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: scale(1.05);
+            box-shadow: 0px 4px 12px rgba(231, 76, 60, 0.3);
+        }
+</style>

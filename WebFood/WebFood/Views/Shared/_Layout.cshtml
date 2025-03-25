@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Trang bán đồ ăn nhanh">
+	<meta name="author" content="">
+	<title>Home | FoodShop</title>
+	<link href="~/css/bootstrap.min.css" rel="stylesheet">
+	<link href="~/css/font-awesome.min.css" rel="stylesheet">
+	<link href="~/css/prettyPhoto.css" rel="stylesheet">
+	<link href="~/css/price-range.css" rel="stylesheet">
+	<link href="~/css/animate.css" rel="stylesheet">
+	<link href="~/css/main.css" rel="stylesheet">
+	<link href="~/css/responsive.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+	<link rel="shortcut icon" href="images/ico/favicon.ico">
+</head>
+
+<body>
+	<header id="header">
+		<div class="header_top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
+								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="header-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<h1 class="logo-title">
+								<a href="@Url.Action("Index","Home")" class="logo">Quốc Thịnh Food</a>
+							</h1>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								
+								@if (!string.IsNullOrEmpty(ViewBag.UserEmail))
+								{
+									<li>
+										<a href="@Url.Action("Edit", "Login", new { email = ViewBag.UserEmail })">
+											@if (!string.IsNullOrEmpty(ViewBag.UserImage))
+											{
+												<img src="@Url.Content(ViewBag.UserImage)" alt="Ảnh đại diện" class="profile-image" style="max-width: 30px; max-height: 30px; border-radius: 50%;" />
+											}
+											@ViewBag.UserEmail
+										</a>
+									</li>
+
+									<!-- Favorite Products -->
+									<li>
+										<a href="@Url.Action("Index", "SanPhamYeuThich")">
+											<i class="fa fa-heart"></i> Yêu thích
+											<span class="cart-count">@ViewBag.SoLuongYeuThich</span>
+										</a>
+									</li>
+
+									<!-- Dropdown for Orders -->
+									<li class="nav-item dropdown">
+										<a href="#" class="nav-link dropdown-toggle order-menu-link" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-shopping-cart"></i> Đơn Hàng
+										</a>
+										<div style="margin:5px;" class="dropdown-menu dropdown-menu-right custom-dropdown" aria-labelledby="orderDropdown">
+											<a style="margin:5px;" class="dropdown-item" href="@Url.Action("Index", "ChiTietDonDatHang")">
+												<i class="fa fa-hourglass-half text-warning mr-2"></i> Đơn hàng đang xử lý
+											</a>
+											<a style="margin:5px;" class="dropdown-item" href="@Url.Action("LichSuDon", "ChiTietDonDatHang")">
+												<i class="fa fa-history text-info mr-2"></i> Lịch sử đơn hàng
+											</a>
+										</div>
+									</li>
+
+									<!-- Cart -->
+									<li>
+										<a href="@Url.Action("Index", "GioHang")">
+											<i class="fa fa-shopping-basket"></i> Giỏ hàng
+											<span class="cart-count">@ViewBag.SoluongHang</span>
+										</a>
+									</li>
+
+									<!-- Nút đăng xuất -->
+									<li>
+										@if (Context.Session.GetString("LoginMethod") == "google")
+										{
+											<a href="@Url.Action("Logout", "Login")"><i class="fa fa-sign-in-alt"></i>Đăng xuất Google</a>
+										}
+										else
+										{
+											<a href="@Url.Action("Logout", "Login")"><i class="fa fa-sign-in-alt"></i>Đăng xuất</a>
+										}
+									</li>
+								}
+								else
+								{
+									<li>
+										<a href="@Url.Action("Login", "Login")">
+											<i class="fa fa-sign-in-alt"></i> Đăng nhập
+										</a>
+									</li>
+								}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="header-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="@Url.Action("Index","Home")" class="active">Trang chủ</a></li>
+								<li class="dropdown">
+									<a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
+									<ul role="menu" class="sub-menu">
+										<li><a href="@Url.Action("Index","Home")">Danh sách sản phẩm</a></li>
+										<li><a href="@Url.Action("Index", "ChiTietDonDatHang")">Đơn Hàng</a></li>
+										<li><a href="@Url.Action("Index", "GioHang")">Giỏ hàng</a></li>
+									</ul>
+								</li>
+								<li><a href="#">Liên hệ</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="search_box pull-right">
+							<input type="text" placeholder="Tìm kiếm" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section id="slider">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
+						<div class="carousel-inner">
+							<div class="item active">
+								<img style="width: 500px; height: 300px;" src="~/images/banhmikep/banhmi1.jpg" alt="Burger" />
+								<div class="carousel-caption">
+									<h1><i class="fa fa-burger" aria-hidden="true"></i> Khám Phá Burger Ngon Nhất!</h1>
+									<p>Thưởng thức burger tươi ngon với nhiều hương vị đặc biệt.</p>
+									<a href="@Url.Action("Index", "Home", new { category = "banhmikep" })" class="btn btn-primary">
+										<i class="fa fa-eye"></i> Xem Thêm
+									</a>
+								</div>
+							</div>
+							<div class="item">
+								<img style="width: 500px; height: 300px;" src="~/images/rautron/salad.jpg" alt="Salad" />
+								<div class="carousel-caption">
+									<h1><i class="fa fa-leaf" aria-hidden="true"></i> Salad Cá Hồi Tuyệt Hảo</h1>
+									<p>Salad với hải sản tươi sống, chờ bạn thưởng thức!</p>
+									<a href="@Url.Action("Index", "Home", new { category = "rautron" })" class="btn btn-primary">
+										<i class="fa fa-eye"></i> Xem Thêm
+									</a>
+								</div>
+							</div>
+							<div class="item">
+								<img style="width: 500px; height: 300px;" src="~/images/trangmieng/trangmieng1.jpg" alt="Dessert" />
+								<div class="carousel-caption">
+									<h1><i class="fa fa-birthday-cake" aria-hidden="true"></i> Món Tráng Miệng Ngọt Ngào</h1>
+									<p>Hãy kết thúc bữa ăn của bạn với những món tráng miệng hấp dẫn.</p>
+									<a href="@Url.Action("Index", "Home", new { category = "trangmieng" })" class="btn btn-primary">
+										<i class="fa fa-eye"></i> Xem Thêm
+									</a>
+								</div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#slider-carousel" data-slide="prev">
+							<span class="fa fa-chevron-left" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+						</a>
+						<a class="right carousel-control" href="#slider-carousel" data-slide="next">
+							<span class="fa fa-chevron-right" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container">
+			<div class="row">
+				@RenderBody()
+			</div>
+		</div>
+	</section>
+
+	<footer id="footer">
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="address">
+							<img src="~/images/Logo/logo.jpg" alt="FoodShop Address" />
+							<p>505 S Atlantic Ave Virginia Beach, VA(Virginia)</p>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="single-widget">
+							<h2>Dịch vụ</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Hỗ trợ trực tuyến</a></li>
+								<li><a href="#">Liên hệ chúng tôi</a></li>
+								<li><a href="#">Trạng thái đơn hàng</a></li>
+								<li><a href="#">Thay đổi vị trí</a></li>
+								<li><a href="#">Câu hỏi thường gặp</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="single-widget">
+							<h2>Danh mục nhanh</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Bánh mì</a></li>
+								<li><a href="#">Bánh ngọt</a></li>
+								<li><a href="#">Thức uống</a></li>
+								<li><a href="#">Salad</a></li>
+								<li><a href="#">Nước giải khát</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="single-widget">
+							<h2>Thông tin</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Giới thiệu</a></li>
+								<li><a href="#">Chính sách bảo mật</a></li>
+								<li><a href="#">Điều khoản dịch vụ</a></li>
+								<li><a href="#">Liên hệ với chúng tôi</a></li>
+								<li><a href="#">Sự kiện mới</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="row">
+					<p class="pull-left">Copyright © 2023 FoodShop Inc. All rights reserved.</p>
+					<p class="pull-right">Thiết kế bởi <span><a target="_blank" href="https://www.facebook.com/profile.php?id=100078668093423">Quốc Thịnh</a></span></p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	@section Scripts {
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
+	}
+
+	<script src="~/js/jquery.js"></script>
+	<script src="~/js/bootstrap.min.js"></script>
+	<script src="~/js/jquery.scrollUp.min.js"></script>
+	<script src="~/js/price-range.js"></script>
+	<script src="~/js/jquery.prettyPhoto.js"></script>
+	<script src="~/js/main.js"></script>
+	<style>
+		/*css viewbang so luong*/
+		.cart-count {
+			background-color: red; /* Màu nền đỏ */
+			color: white; /* Màu chữ trắng */
+			font-size: 8px; /* Giảm kích thước chữ */
+			font-weight: bold; /* Chữ đậm */
+			border-radius: 50%; /* Bo tròn thành vòng tròn */
+			padding: 2px; /* Giảm khoảng cách xung quanh chữ */
+			position: absolute; /* Đặt vị trí tuyệt đối */
+			top: -7px; /* Căn chỉnh từ trên */
+			right: -15px; /* Căn chỉnh từ bên phải */
+			min-width: 16px; /* Đảm bảo vòng tròn có kích thước tối thiểu */
+			height: 16px; /* Đảm bảo chiều cao khớp với đường kính vòng tròn */
+			text-align: center; /* Canh giữa nội dung */
+			line-height: 13px; /* Căn giữa dòng cho phù hợp với chiều cao */
+
+		}
+		/* Thiết kế logo */
+		.logo {
+			font-size: 4rem;
+			font-weight: bold;
+			background: linear-gradient(90deg, #2c3e50, #e74c3c, #3498db, #e67e22, #1abc9c, #f1c40f, #9b59b6, #2980b9, #e74c3c, #2ecc71, #9b59b6, #e67e22);
+			background-clip: text;
+			color: transparent;
+			color: transparent;
+			text-transform: uppercase;
+		}
+
+
+	</style>
+</body>
+</html>

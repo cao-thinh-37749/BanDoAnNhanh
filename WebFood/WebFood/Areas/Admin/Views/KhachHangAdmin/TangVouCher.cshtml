@@ -1,0 +1,163 @@
+﻿@{
+    var email = ViewBag.KhEmail?.Email ?? "Không xác định";
+    Layout = "_LayoutAdmin";
+    var voucherList = ViewBag.VoucherListAll as List<int>;
+}
+<h1 class="text-center">Tặng Voucher cho '@email'</h1>
+
+<!-- Nút quay lại -->
+<div class="text-left mb-4">
+    <a href="@Url.Action("Index", "KhachHangAdmin", new { area = "Admin" })" id="trolai" class="btn btn-outline-secondary btn-lg">
+        <i class="fa fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+<hr style="margin:1.5rem" />
+
+<form asp-action="TangVouCher" asp-controller="KhachHangAdmin" method="post" class="voucher-form">
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="email" name="email" class="form-control" value="@email" readonly />    
+    </div>
+
+    <div class="form-group">
+        <label>Chọn mã giảm giá:</label>
+        <div class="voucher-options">
+            @foreach (var voucher in voucherList!)
+            {
+                <div class="voucher-option">
+                    <input type="radio" id="voucher-@voucher" name="selectedVoucher" value="@voucher" required>
+                    <label for="voucher-@voucher">Giảm @voucher%</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-submit">Gửi Voucher</button>
+</form>
+
+<style>
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #e74c3c;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 3px solid #f39c12;
+    }
+
+    #trolai {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        #trolai:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #fdf4e3;
+        padding: 30px;
+    }
+
+    .voucher-form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            font-size: 16px;
+            color: #555;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #f39c12;
+        border-radius: 5px;
+        background-color: #fff;
+        transition: border 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+        }
+
+    .voucher-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Hiển thị tối đa 4 cột */
+        gap: 15px;
+        max-height: 250px; /* Giới hạn chiều cao */
+        overflow-y: auto; /* Cuộn dọc nếu có quá nhiều mã */
+        padding-bottom: 10px;
+    }
+
+    .voucher-option {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .voucher-option:hover {
+            background-color: #fff3e6;
+            border-color: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.2);
+        }
+
+        .voucher-option input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #e74c3c;
+        }
+
+        .voucher-option label {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #e74c3c;
+        color: #fff;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-submit:hover {
+            background-color: #c0392b;
+        }
+</style>

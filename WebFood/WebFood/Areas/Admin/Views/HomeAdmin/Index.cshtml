@@ -1,0 +1,156 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "Trang Tổng Quan";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@{
+    var tongSoLuongSanPham = ViewBag.TongSoLuongSanPham ?? 0;
+    var tongSoLuongSanPhamHetHang = ViewBag.TongSoLuongSanPhamHetHang ?? 0;
+    var tongDonHangTrongTuan = ViewBag.TongDonHangTrongTuan ?? 0;
+    var tongDonHangTrongTuanTruoc = ViewBag.TongDonHangTrongTuanTruoc ?? 0;
+    var doanhThuTrongTuan = ViewBag.DoanhThuTrongTuan ?? 0;
+    var doanhThuTrongTuanTruoc = ViewBag.DoanhThuTrongTuanTruoc ?? 0;
+    var startOfWeek = ViewBag.StartOfWeek;
+    var endOfWeek = ViewBag.EndOfWeek;
+    var startOfLastWeek = ViewBag.StartOfLastWeek;
+    var endOfLastWeek = ViewBag.EndOfLastWeek;
+}
+
+<div class="container">
+    <h2>Trang Quản Trị</h2>
+    <p><strong>Doanh thu và đơn hàng từ:</strong> @startOfWeek đến @endOfWeek</p>
+
+    <div class="row">
+        <!-- Biểu đồ số lượng sản phẩm -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng Số Lượng Sản Phẩm</h5>
+                    <canvas id="productChart" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ doanh thu -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Doanh Thu Trong Tuần</h5>
+                    <canvas id="revenueChart" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ đơn hàng -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tổng Đơn Hàng Trong Tuần</h5>
+                    <canvas id="orderChart" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ so sánh doanh thu và đơn hàng giữa tuần này và tuần trước -->
+    <div class="row">
+        <div class="col-md-6">
+            <h4>So sánh Doanh Thu</h4>
+            <p>Tuần này: @doanhThuTrongTuan.ToString("C0")</p>
+            <p>Tuần trước: @doanhThuTrongTuanTruoc.ToString("C0")</p>
+            <canvas id="revenueComparisonChart" width="150" height="130"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>So sánh Đơn Hàng</h4>
+            <p>Tuần này: @tongDonHangTrongTuan</p>
+            <p>Tuần trước: @tongDonHangTrongTuanTruoc</p>
+            <canvas id="orderComparisonChart" width="150" height="130"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Biểu đồ số lượng sản phẩm
+    var productData = {
+        labels: ['Tổng Số Lượng', 'Hết Hàng'],
+        datasets: [{
+            data: [@tongSoLuongSanPham, @tongSoLuongSanPhamHetHang],
+            backgroundColor: ['#4e73df', '#e74a3b'],
+            hoverBackgroundColor: ['#2e59d9', '#e74a3b'],
+            hoverBorderColor: '#ffffff',
+        }]
+    };
+    var ctxProduct = document.getElementById('productChart').getContext('2d');
+    new Chart(ctxProduct, { type: 'doughnut', data: productData });
+
+    // Biểu đồ doanh thu trong tuần
+    var revenueData = {
+        labels: ['Doanh Thu'],
+        datasets: [{
+            label: 'Doanh Thu Trong Tuần',
+            data: [@doanhThuTrongTuan],
+            backgroundColor: ['#1abc9c'],
+            hoverBackgroundColor: ['#17a589'],
+            hoverBorderColor: '#ffffff',
+        }]
+    };
+    var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctxRevenue, { type: 'bar', data: revenueData, options: { responsive: true, indexAxis: 'y' } });
+
+    // Biểu đồ đơn hàng trong tuần
+    var orderData = {
+        labels: ['Đơn Hàng'],
+        datasets: [{
+            label: 'Tổng Đơn Hàng Trong Tuần',
+            data: [@tongDonHangTrongTuan],
+            backgroundColor: ['#3498db'],
+            hoverBackgroundColor: ['#2980b9'],
+            hoverBorderColor: '#ffffff',
+        }]
+    };
+    var ctxOrder = document.getElementById('orderChart').getContext('2d');
+    new Chart(ctxOrder, { type: 'bar', data: orderData, options: { responsive: true, indexAxis: 'y' } });
+
+    // Biểu đồ so sánh doanh thu
+    var revenueComparisonData = {
+        labels: ['Tuần Này', 'Tuần Trước'],
+        datasets: [{
+            label: 'Doanh Thu',
+            data: [@doanhThuTrongTuan, @doanhThuTrongTuanTruoc],
+            backgroundColor: ['#1abc9c', '#f39c12'],
+            hoverBackgroundColor: ['#17a589', '#f39c12'],
+            hoverBorderColor: '#ffffff',
+        }]
+    };
+    var ctxRevenueComparison = document.getElementById('revenueComparisonChart').getContext('2d');
+    new Chart(ctxRevenueComparison, { type: 'bar', data: revenueComparisonData, options: { responsive: true } });
+
+    // Biểu đồ so sánh đơn hàng
+    var orderComparisonData = {
+        labels: ['Tuần Này', 'Tuần Trước'],
+        datasets: [{
+            label: 'Đơn Hàng',
+            data: [@tongDonHangTrongTuan, @tongDonHangTrongTuanTruoc],
+            backgroundColor: ['#3498db', '#e74a3b'],
+            hoverBackgroundColor: ['#2980b9', '#e74a3b'],
+            hoverBorderColor: '#ffffff',
+        }]
+    };
+    var ctxOrderComparison = document.getElementById('orderComparisonChart').getContext('2d');
+    new Chart(ctxOrderComparison, { type: 'bar', data: orderComparisonData, options: { responsive: true } });
+</script>
+<script>
+    // Hàm điều hướng đến trang sản phẩm
+    function SanPham() {
+        window.location.href = '@Url.Action("Index", "SanPhamAdmin", new {area = "Admin"})';
+    }
+
+    function DonHang() {
+        window.location.href = '@Url.Action("Index", "DonHangAdmin", new { area = "Admin" })';
+    }
+
+    function KhachHang() {
+        window.location.href = '@Url.Action("Index", "DonHangAdmin", new { area = "Admin" })';
+    }
+</script>

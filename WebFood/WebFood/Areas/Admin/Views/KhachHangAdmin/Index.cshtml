@@ -1,0 +1,284 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Danh sách khách hàng";
+    Layout = "_LayoutAdmin";
+}
+
+<h1 class="my-4 text-center text-primary">Danh sách khách hàng</h1>
+
+<div class="mb-4 text-center">
+    <!-- Nút quay lại -->
+    <div class="text-left mb-4">
+        <a href="@Url.Action("Index", "HomeAdmin", new { area = "Admin" })" id="trolai" class="btn btn-outline-secondary btn-lg">
+            <i class="fa fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+    <hr style="margin:1.5rem" />
+    <!-- Nút lọc và hiển thị tất cả khách hàng -->
+    <a href="@Url.Action("Index", new { Loc = true })" class="btn btn-primary ">Lọc khách hàng có tổng tiền > 100</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Hiển thị tất cả khách hàng</a>
+
+   <form method="get">
+        <input style=" display: none; " type="checkbox" name="loc" value="true" id="locCheckBox"
+        @(ViewBag.Loc == true ? "checked" : "") />
+
+        <input type="text" name="email" placeholder="Nhập email..." />
+        <button type="submit">Tìm kiếm</button>
+    </form>
+
+
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+
+        <thead class="table-primary">
+                <tr>
+                    <th>Mã khách hàng</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Trạng thái</th>
+                    @if (Model is List<WebFood.Models.KhachHangTongTien>)
+                    {
+                        <th>Tổng tiền</th> <!-- Chỉ hiển thị cột "Tổng tiền" khi lọc -->
+                    }
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (Model is List<WebFood.Models.KhachHangTongTien>) // Dữ liệu lọc (có tổng tiền)
+                {
+                    <tr>
+                        <td>@item.KhachHang.Id</td> <!-- Truy cập vào KhachHang -->
+                        <td>@item.KhachHang.HoTen</td>
+                        <td>@item.KhachHang.Email</td>
+                        <td>@item.KhachHang.PhoneNumber</td>
+                        <td>@item.KhachHang.TinhTrang</td>
+                        <td>@item.TongTien.ToString("C")</td>
+                        <td>
+                            <div>
+                            <a href="@Url.Action("Details", new { Id = item.KhachHang.Id })" class="btn btn-info"><i class="fa fa-eye"></i> Xem chi tiết</a>
+                            </div>
+                            <a href="@Url.Action("TangVouCher", new { email = item.KhachHang.Email})" class="btn btn-warning"><i class="fa fa-gift"></i> Tặng Voucher</a>
+                        </td>
+                    </tr>
+                }
+                else // Dữ liệu đầy đủ (không có tổng tiền)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.HoTen</td>
+                        <td>@item.Email</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.TinhTrang</td>
+                        <td>
+                            <a href="@Url.Action("Details", new { Id = item.Id })" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> Xem chi tiết</a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+    </table>
+</div>
+
+<style>
+
+    input[type="text"] {
+        width: 250px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    /* Khoảng cách trên dưới cho tiêu đề */
+    .my-4 {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Tiêu đề trung tâm với màu xanh */
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #28a745;
+    }
+
+    /* Nút quay lại */
+    #trolai {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        #trolai:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+    /* Style cho các nút lọc và hiển thị */
+    .btn {
+        font-size: 1.7rem; /* Điều chỉnh kích thước font cho dễ đọc */
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.375rem;
+        text-align: center;
+        margin-top: 1rem; /* Tăng khoảng cách giữa các nút */
+    }
+
+    /* Nút primary cho lọc */
+    .btn-primary {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    /* Nút secondary cho hiển thị tất cả */
+    .btn-secondary {
+        background-color: #ff9800; /* Màu cam dịu */
+        color: white;
+        border-color: #ff9800;
+    }
+
+        .btn-secondary:hover {
+            background-color: #e68900;
+            border-color: #e68900;
+        }
+
+    /* Hiệu ứng hover cho các nút */
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+    /* Cải tiến bảng sản phẩm */
+    table {
+        margin-top: 15px;
+        font-size: 14px;
+        width: 100%;
+        border-collapse: collapse;
+        display: block; /* Chuyển tbody thành block để cuộn */
+        max-height: 650px; /* Đặt chiều cao tối đa cho tbody */
+        overflow-y: auto; /* Cuộn dọc khi nội dung vượt quá chiều cao */
+    }
+
+        table th, table td {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        table tbody tr {
+            background-color: #ffffff;
+        }
+
+            table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        /* Cố định header của bảng */
+        table thead, table tbody tr {
+            display: table; /* Giữ các phần tử theo kiểu bảng */
+            width: 100%; /* Đảm bảo khớp với chiều rộng bảng */
+            table-layout: fixed; /* Cố định độ rộng các cột */
+        }
+
+        table thead {
+            position: sticky; /* Giữ cố định phần thead khi cuộn */
+            top: 0; /* Vị trí cố định của thead */
+            z-index: 1; /* Đảm bảo thead nằm trên tbody */
+        }
+
+        /* Điều chỉnh các cột để khớp */
+        table tbody td {
+            text-align: center;
+            white-space: nowrap; /* Không cho xuống dòng */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
+        }
+        /* Áp dụng màu cho tất cả các cột */
+        table td:nth-child(1) {
+            background-color: #f8d7da; /* Màu cho cột 1 */
+        }
+
+        table td:nth-child(2) {
+            background-color: #d1ecf1; /* Màu cho cột 2 */
+        }
+
+        table td:nth-child(3) {
+            background-color: #d4edda; /* Màu cho cột 3 */
+        }
+
+        table td:nth-child(4) {
+            background-color: #fff3cd; /* Màu cho cột 4 */
+        }
+
+        table td:nth-child(5) {
+            background-color: #f8d7da; /* Màu cho cột 5 */
+        }
+
+        table td:nth-child(6) {
+            background-color: #d1ecf1; /* Màu cho cột 6 */
+        }
+
+    /* Các nút thao tác */
+    .btn-info, .btn-warning {
+        border-radius: 25px;
+        font-size: 16px;
+        padding: 8px 18px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: #fff;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+        .btn-info:hover, .btn-warning:hover {
+            opacity: 0.8;
+        }
+</style>

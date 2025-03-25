@@ -1,0 +1,369 @@
+﻿@model IEnumerable<WebFood.Models.ChiTietDonDatHang>
+
+@{
+    ViewData["Title"] = "Danh sách chi tiết đơn đặt hàng";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="mt-4">
+    <h1 class="text-center text-primary mb-4">Danh Sách Chi Tiết Đơn Đặt Hàng</h1>
+    <!-- Nút quay lại -->
+    <div class="text-left mb-4">
+        <a href="@Url.Action("Index", "HomeAdmin", new { area = "Admin" })" id="trolai" class="btn btn-outline-secondary btn-lg">
+            <i class="fa fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+    <hr style="margin:1.5rem" />
+
+    <div style="margin-right: 10px;" class="mb-3 text-right">
+        <form style="text-align: left; "method="get" class="input-group row g-3 align-items-center">
+
+            <!-- Dropdown chọn sắp xếp -->
+            <div style="padding-right: 200px; margin-left:15px;" class="">
+                <label for="sort" class="form-label">Sắp xếp theo</label>
+                <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="" selected="@(ViewData["SortList"]?.ToString() == "" ? "selected" : "")">Mặc định</option>
+                    <option value="asc" selected="@(ViewData["SortList"]?.ToString() == "asc")">Giá tăng dần</option>
+                    <option value="desc" selected="@(ViewData["SortList"]?.ToString() == "desc")">Giá giảm dần</option>
+                </select>
+            </div>
+
+            <!-- Input tìm kiếm tên khách hàng -->
+            <div class="col-md-3">
+                <label for="TenKhach" class="form-label">Tên khách hàng</label>
+                <input type="text" id="TenKhach" name="TenKhach" value="@ViewData["TenKhach"]" class="form-control form-control-lg rounded-pill" placeholder="Tìm kiếm tên khách hàng..." />
+            </div>
+
+            <!-- Input chọn ngày bắt đầu -->
+            <div class="col-md-3">
+                <label for="NgayBatDau" class="form-label">Ngày bắt đầu</label>
+                <input type="date" id="NgayBatDau" name="NgayBatDau" value="@ViewData["NgayBatDau"]" class="form-control form-control-lg rounded-pill" />
+            </div>
+
+            <!-- Input chọn ngày kết thúc -->
+            <div class="col-md-3">
+                <label for="NgayKetThuc" class="form-label">Ngày kết thúc</label>
+                <input type="date" id="NgayKetThuc" name="NgayKetThuc" value="@ViewData["NgayKetThuc"]" class="form-control form-control-lg rounded-pill" />
+            </div>
+
+            <!-- Nút tìm kiếm -->
+            <div class=" d-flex justify-content-center">
+                <button style="margin-top: 20px;" type="submit" class="btn btn-primary rounded-pill w-100">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+    <!-- Hiển thị tổng tiền -->
+    <h3 class="tong-tien">Tổng Tiền: @String.Format("{0:C}", ViewData["TongTien"])</h3>
+
+    <!-- Hiển thị ngày lọc -->
+    <div class="ngay-loc">
+        @if (ViewData["NgayLoc"] != null)
+        {
+            <p>Ngày: @ViewData["NgayLoc"]</p>
+        }
+        else
+        {
+            <p>Tất cả ngày</p>
+        }
+    </div>
+
+    <!-- Bảng danh sách chi tiết đơn đặt hàng -->
+    <table class="table table-hover table-bordered text-center align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Tên Khách Hàng</th>
+                <th>Ảnh Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá</th>
+                <th>Ngày Thanh Toán</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.KhachHang?.HoTen</td> <!-- Hiển thị tên khách hàng -->
+                        <td><img src="@item.SanPham?.HinhAnh" alt="@item.SanPham?.TenSanPham" class="img-thumbnail" /></td>
+                        <td>@item.SanPham?.TenSanPham</td> <!-- Hiển thị tên sản phẩm -->
+                        <td>@item.SoLuong</td>
+                        <td>@String.Format("{0:C}", item.Gia)</td> <!-- Định dạng giá -->
+                        <td>@item.NgayThanhToan?.ToString("dd/MM/yyyy")</td>
+                        <td>@item.TrangThai</td>
+                        <td>
+                            <a asp-action="Details" asp-route-MaChiTiet="@item.MaChiTiet" class="btn btn-info btn-sm rounded-pill">
+                                <i class="fa fa-info-circle"></i> Chi Tiết
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" class="text-danger">Không có chi tiết đơn hàng nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- CSS cải tiến -->
+<style>
+    .body-create {
+        background-color: #f7f8fa; /* Màu nền nhẹ */
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #28a745;
+    }
+
+    #trolai {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        #trolai:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+    /* Cải tiến phần hiển thị tổng tiền */
+    .tong-tien {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f1f1f1; /* Màu nền sáng */
+        text-align: right;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cải tiến phần hiển thị ngày lọc */
+    .ngay-loc {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #28a745;
+        margin-top: 10px;
+        padding: 8px;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Màu nền sáng */
+        text-align: right;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        margin-top: 20px;
+        font-size: 14px;
+        width: 100%;
+        border-collapse: collapse;
+        display: block; /* Chuyển tbody thành block để cuộn */
+        max-height: 630px; /* Đặt chiều cao tối đa cho tbody */
+        overflow-y: auto; /* Cuộn dọc khi nội dung vượt quá chiều cao */
+    }
+
+        table th, table td {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+
+        table th {
+            background-color: #007bff; /* Xanh dương cho tiêu đề */
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        table tbody tr {
+            background-color: #ffffff; /* Màu nền trắng cho các dòng */
+        }
+
+            table tbody tr:hover {
+                background-color: #f1f1f1; /* Màu nền khi di chuột vào dòng */
+            }
+
+        /* Cố định header của bảng */
+        table thead, table tbody tr {
+            display: table; /* Giữ các phần tử theo kiểu bảng */
+            width: 100%; /* Đảm bảo khớp với chiều rộng bảng */
+            table-layout: fixed; /* Cố định độ rộng các cột */
+        }
+
+        table thead {
+            position: sticky; /* Giữ cố định phần thead khi cuộn */
+            top: 0; /* Vị trí cố định của thead */
+            z-index: 1; /* Đảm bảo thead nằm trên tbody */
+        }
+
+        /* Điều chỉnh các cột để khớp */
+        table tbody td {
+            text-align: center;
+            white-space: nowrap; /* Không cho xuống dòng */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
+        }
+    /* Cải tiến form tìm kiếm */
+    .input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-control, .form-select {
+        padding: 10px; /* Thêm khoảng cách bên trong */
+        font-size: 14px; /* Điều chỉnh kích thước chữ */
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 12px 20px;
+        border-radius: 25px; /* Làm nút tròn hơn */
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    /* Cải tiến các nút */
+    .btn {
+        border-radius: 25px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+    /* Hình ảnh sản phẩm */
+    img.img-thumbnail {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+        /* Cải tiến màu sắc cho các cột trong bảng */
+        table td:nth-child(1) {
+            background-color: #f8d7da; /* Màu nhạt cho mã chi tiết */
+        }
+
+        table td:nth-child(2) {
+            background-color: #d1ecf1; /* Màu nhạt cho tên khách hàng */
+        }
+
+        table td:nth-child(3) {
+            background-color: #d4edda; /* Màu nhạt cho ảnh sản phẩm */
+        }
+
+        table td:nth-child(4) {
+            background-color: #fff3cd; /* Màu nhạt cho tên sản phẩm */
+        }
+
+        table td:nth-child(5) {
+            background-color: #f8d7da; /* Màu nhạt cho số lượng */
+        }
+
+        table td:nth-child(6) {
+            background-color: #d1ecf1; /* Màu nhạt cho giá */
+        }
+
+        table td:nth-child(7) {
+            background-color: #d4edda; /* Màu nhạt cho ngày thanh toán */
+        }
+
+        table td:nth-child(8) {
+            background-color: #fff3cd; /* Màu nhạt cho trạng thái */
+        }
+
+        table td:nth-child(9) {
+            background-color: #f8d7da; /* Màu nhạt cho hành động */
+        }
+
+    /* Tùy chỉnh nút */
+    .btn-info {
+        background-color: #17a2b8; /* Màu nút chi tiết */
+        color: white;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+        .btn-info:hover {
+            background-color: #138496; /* Màu nền khi hover */
+        }
+
+    /* Cải tiến hình ảnh sản phẩm */
+    img.img-thumbnail {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Các nút hành động */
+    .btn {
+        border-radius: 25px;
+        padding: 10px 20px;
+    }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+    .btn-sm {
+        font-size: 12px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+</style>

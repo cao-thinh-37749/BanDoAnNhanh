@@ -1,0 +1,267 @@
+﻿@model KhachHangDetailsViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết khách hàng";
+    Layout = "_LayoutAdmin";
+}
+
+<h1 class="my-4 text-center text-primary font-weight-bold">Chi tiết khách hàng</h1>
+
+<!-- Nút quay lại -->
+<div class="text-left mb-4">
+    <a href="@Url.Action("Index", "KhachHangAdmin", new { area = "Admin" })" id="trolai" class="btn btn-outline-secondary btn-lg">
+        <i class="fa fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+<hr style="margin:1.5rem" />
+
+<!-- Thông tin khách hàng -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-gradient-primary ">
+        <h4 class="m-0">Thông tin khách hàng</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3 text-muted">Họ tên:</dt>
+            <dd class="col-sm-9 text-dark">@Model.KhachHang!.HoTen</dd>
+
+            <dt class="col-sm-3 text-muted">Email:</dt>
+            <dd class="col-sm-9 text-dark">@Model.KhachHang.Email</dd>
+
+            <dt class="col-sm-3 text-muted">Số điện thoại:</dt>
+            <dd class="col-sm-9 text-dark">@Model.KhachHang.PhoneNumber</dd>
+
+            <dt class="col-sm-3 text-muted">Địa chỉ:</dt>
+            <dd class="col-sm-9 text-dark">@Model.KhachHang.DiaChi</dd>
+
+            <dt class="col-sm-3 text-muted">Tình trạng:</dt>
+            <dd class="col-sm-9 text-dark"> @Model.KhachHang.TinhTrang</dd>
+
+
+            <dt class="col-sm-3 text-muted">Vai trò:</dt>
+            <dd class="col-sm-9 text-dark">
+                @if (Model.Roles.Any())
+                {
+                    @string.Join(", ", Model.Roles)
+                }
+                else
+                {
+                    <span class="text-muted">Không có vai trò</span>
+                }
+
+                <!-- Form để hiển thị danh sách vai trò -->
+                <form asp-action="Details" method="get" class="mt-3">
+                    <input type="hidden" name="id" value="@Model.KhachHang.Id" />
+                    <input type="hidden" name="showRoles" value="true" />
+                    <button type="submit" class="btn btn-primary">Cập nhật vai trò</button>
+                </form>
+
+                @if (ViewBag.ShowRoles == true)
+                {
+                    <form asp-action="UpdateRoles" method="post" class="mt-3">
+                        <input type="hidden" name="Id" value="@Model.KhachHang.Id" />
+
+                        <label class="font-weight-bold">Chọn vai trò:</label>
+                        <select name="roles" multiple class="form-control">
+                            @foreach (var role in Model.AllRoles)
+                            {
+                                <option value="@role" selected="@(Model.Roles.Contains(role))">@role</option>
+                            }
+                        </select>
+
+                        <button type="submit" class="btn btn-success mt-2">Lưu thay đổi</button>
+                    </form>
+                }
+            </dd>        
+        </dl>
+        <form asp-action="Delete" method="post" class="mt-3">
+            <input type="hidden" name="id" value="@Model.KhachHang.Id" />
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
+                Xóa khách hàng
+            </button>
+        </form>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-info" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
+                @TempData["Message"]
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<!-- Chi tiết đơn hàng -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-gradient-info text-white ">
+        <h4 class="m-0">Chi tiết đơn hàng</h4>
+    </div>
+    <div class="card-body">
+
+        <!-- Hiển thị tổng tiền -->
+        <h3 class="tong-tien">Tổng Tiền: @ViewData["TongTien"]</h3>
+
+        <!-- Bảng Sản phẩm -->
+        <table class="table table-sm table-striped table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th class="text-center">Ảnh</th>
+                    <th class="text-center">Tên sản phẩm</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-center">Giá</th>
+                    <th class="text-center">Ngày Giao</th>
+                    <th class="text-center">Ngày Thanh Toán</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.ChiTietDonHangs)
+                {
+                    <tr>
+                        <td class="text-center"><img src="@item.SanPham!.HinhAnh" class="product-img" alt="@item.SanPham!.TenSanPham" /></td>
+                        <td>@item.SanPham!.TenSanPham</td>
+                        <td class="text-center">@item.SoLuong</td>
+                        <td class="text-center">@item.Gia.ToString("C")</td>
+                        <td class="text-center">@item.NgayGiao</td>
+                        <td class="text-center">@item.NgayThanhToan</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Thêm nút xóa hết chi tiết đơn hàng -->
+        <div class="text-end">
+            <form method="post" asp-action="DeleteAllOrderDetails" asp-route-customerId="@Model.KhachHang.Id" class="d-inline">
+                <button type="submit" class="btn btn-danger">Xóa hết chi tiết đơn hàng</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Tiêu đề trung tâm với màu xanh */
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #28a745;
+    }
+
+    /* Nút quay lại */
+    #trolai {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        #trolai:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+    /* Tiêu đề trong card-header */
+    .card-header h4 {
+        font-size: 2.8rem; /* Tăng kích thước chữ */
+        font-weight: bold;
+        color: white;
+        text-transform: uppercase; /* Viết hoa chữ */
+        letter-spacing: 1px; /* Thêm khoảng cách giữa các chữ */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Thêm hiệu ứng bóng cho tiêu đề */
+    }
+
+    /* Card thông tin khách hàng */
+    .card-header.bg-gradient-primary {
+        background: linear-gradient(to right, #007bff, #00b0ff);
+    }
+
+    /* Card chi tiết đơn hàng */
+    .card-header.bg-gradient-info {
+        background: linear-gradient(to right, #17a2b8, #20c997);
+    }
+
+    .card-body {
+        background-color: #f7f7f7;
+        font-size: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    /* Tổng tiền */
+    .tong-tien {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f1f1f1; /* Màu nền sáng */
+        text-align: right;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Bảng chi tiết đơn hàng */
+    .table {
+        font-size: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: block; /* Chuyển tbody thành block để cuộn */
+        max-height: 450px; /* Đặt chiều cao tối đa cho tbody */
+        overflow-y: auto; /* Cuộn dọc khi nội dung vượt quá chiều cao */
+    }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #f1f1f1;
+            color: #343a40;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    /* Cố định header của bảng */
+    table thead, table tbody tr {
+        display: table; /* Giữ các phần tử theo kiểu bảng */
+        width: 100%; /* Đảm bảo khớp với chiều rộng bảng */
+        table-layout: fixed; /* Cố định độ rộng các cột */
+    }
+
+    table thead {
+        position: sticky; /* Giữ cố định phần thead khi cuộn */
+        top: 0; /* Vị trí cố định của thead */
+        z-index: 1; /* Đảm bảo thead nằm trên tbody */
+    }
+
+    /* Điều chỉnh các cột để khớp */
+    table tbody td {
+        text-align: center;
+        white-space: nowrap; /* Không cho xuống dòng */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
+    }
+    .product-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .product-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+</style>

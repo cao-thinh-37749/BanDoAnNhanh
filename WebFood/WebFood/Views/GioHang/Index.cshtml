@@ -1,0 +1,145 @@
+﻿@model IEnumerable<WebFood.Models.GioHang>
+
+<div class="features_items">
+    <h1 class="title text-center">Giỏ Hàng</h1>
+    @* Hiển thị thông báo nếu có *@
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info" style="text-align: center;">
+            @TempData["Message"]
+        </div>
+
+        <script>
+            // Tự động đóng thông báo sau 5 giây (5000 mili giây)
+            setTimeout(function () {
+                $(".alert").alert('close');
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+    }
+
+    <div class="category-tab">
+        <div class="col-sm-12">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="cart-items">
+                    <div class="row">
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="row">
+                                <div  class="col-sm-6 text-left mb-3 mb-sm-0">
+                                    <a style="margin-left: 15px;" href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">
+                                        <i class="fa fa-arrow-left"></i> Trở Về
+                                    </a>
+                                </div>
+
+                                <!-- Nút Thanh Toán Tất Cả lớn và căn lề phải, có thêm padding để thu hẹp khoảng cách -->
+                                <div class="col-sm-6 text-right">
+                                    <a style="margin-right: 15px;" href="@Url.Action("ThanhToanTatCaSanPham", "DonDatHang")" class="btn btn-success btn-lg w-75 mx-auto d-block">
+                                        <i class="fa fa-credit-card"></i> Thanh Toán Tất Cả: @Model.Sum(x => x.SoLuong * x.SanPham!.Gia).ToString("C")
+                                    </a>
+                                </div>
+                            </div>
+                               <hr style="margin:1.5rem" />
+                            foreach (var gioHang in Model)
+                            {
+                                <div class="col-sm-4">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+
+                                                <img style="height: 200px;" src="@Url.Content(gioHang.SanPham!.HinhAnh)" alt="@gioHang.SanPham.TenSanPham" />
+                                                <h2>@gioHang.SanPham.Gia.ToString("C")</h2>
+                                                <p>@gioHang.SanPham.TenSanPham</p>
+                                                <div>
+                                                    <!-- Nút Giảm Số Lượng -->
+                                                    <form asp-action="GiamSoLuong" asp-controller="GioHang" method="post" style="display:inline;">
+                                                        <input type="hidden" name="maSanPham" value="@gioHang.MaSanPham" />
+                                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 1px 2px;">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <span style="opacity: 0.8;">Số lượng: @gioHang.SoLuong</span>
+
+                                                    <!-- Nút Tăng Số Lượng -->
+                                                    <form asp-action="TangSoLuong" asp-controller="GioHang" method="post" style="display:inline;">
+                                                        <input type="hidden" name="maSanPham" value="@gioHang.MaSanPham" />
+                                                        <button type="submit" class="btn btn-success btn-sm" style="padding: 1px 2px;">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                                <p style="margin-top:5px;">Tổng tiền: @((gioHang.SoLuong * gioHang.SanPham.Gia).ToString("C"))</p>
+
+                                                <a href="@Url.Action("ThanhToanMotSanPham", "DonDatHang", new { maSanPham = @gioHang.MaSanPham })" class="btn btn-warning d-flex align-items-center justify-content-center">
+                                                    <i class="fa fa-credit-card mr-2"></i> Thanh Toán Sản Phẩm
+                                                </a>
+                                            </div>
+                                            <div class="choose">
+                                                <ul class="nav nav-pills nav-justified">
+                                                    <li class="nav-item">
+                                                        <!-- Nút Xóa -->
+                                                        <a href="javascript:void(0);" onclick="document.getElementById('delete-item-@gioHang.SanPham.MaSanPham').submit();" class="btn btn-danger btn-block d-flex align-items-center justify-content-center">
+                                                            <i class="fa fa-trash"></i> Xóa
+                                                        </a>
+                                                        <!-- Form ẩn để gửi POST -->
+                                                        <form id="delete-item-@gioHang.SanPham.MaSanPham" action="@Url.Action("Delete", "GioHang", new { maSanPham = gioHang.SanPham.MaSanPham })" method="post" style="display: none;">
+                                                            @Html.AntiForgeryToken() <!-- Bảo vệ CSRF -->
+                                                        </form>
+                                                    </li>
+
+                                                    <li class="nav-item">
+                                                        <!-- Nút Chi Tiết -->
+                                                        <a href="@Url.Action("Details", "Home", new { MaSanPham = gioHang.SanPham.MaSanPham })" class="btn btn-outline-secondary btn-block d-flex align-items-center justify-content-center">
+                                                            <i class="fa fa-plus-square mr-1"></i> Chi Tiết
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-sm-12 text-center">
+                                <h4>Giỏ hàng của bạn trống.</h4>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    h1.text-center {
+        font-size: 2.5rem; /* Kích thước chữ lớn */
+        font-weight: bold; /* Làm đậm tiêu đề */
+        color: #2c3e50; /* Màu sắc tối, dễ nhìn */
+        text-transform: uppercase; /* Chữ in hoa */
+        margin-bottom: 1.5rem; /* Khoảng cách phía dưới */
+        margin: 1.5rem;
+        letter-spacing: 2px; /* Tăng khoảng cách giữa các chữ */
+        font-family: 'Arial', sans-serif; /* Font chữ hiện đại */
+        text-align: center; /* Căn giữa */
+        padding: 10px 0; /* Khoảng cách trên và dưới */
+        border-bottom: 2px solid #e74c3c; /* Thêm đường viền dưới màu đỏ */
+    }
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+</style>

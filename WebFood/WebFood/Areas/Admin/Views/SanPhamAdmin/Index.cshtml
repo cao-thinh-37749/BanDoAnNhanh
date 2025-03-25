@@ -1,0 +1,327 @@
+﻿@model IEnumerable<WebFood.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="mt-4">
+    <h1 class="text-center text-primary mb-4">Danh Sách Sản Phẩm</h1>
+    <!-- Nút quay lại -->
+    <div class="text-left mb-4">
+        <a href="@Url.Action("Index", "HomeAdmin", new { area = "Admin" })" id="trolai" class="btn btn-outline-secondary btn-lg">
+            <i class="fa fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+    <hr style="margin:1.5rem" />
+
+    <!-- Tìm kiếm và Thêm sản phẩm -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Create" class="btn btn-success rounded-pill">
+                <i class="fas fa-plus-circle me-2"></i> Thêm Sản Phẩm Mới
+            </a>
+        </div>
+       <div class="col-md-6">
+
+            <!-- Lọc Danh Mục Hoặc Tên -->
+            <form method="get" class="input-group mb-4">
+                <!-- Dropdown chọn danh mục -->
+                <select name="categoryId" class="form-select form-select-lg rounded-pill">
+                    <option value="">Tất Cả</option>
+                    @foreach (var item in (List<SelectListItem>)ViewBag.DanhMucList)
+                    {
+                        var isSelected = item.Value == ViewData["categoryId"]?.ToString() ? "selected" : "";
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+
+                <!-- Input tìm kiếm sản phẩm -->
+                <div style="width: 150px;" class="input-group-append">
+                    <input type="text" name="searchTerm" value="@ViewData["searchTerm"]" class="form-control form-control-lg rounded-pill" placeholder="Tìm kiếm sản phẩm..." />
+                </div>
+
+                <!-- Checkbox lọc sản phẩm hết hàng -->
+                <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input" type="checkbox" id="outOfStock" name="ShowOutOfStock" value="true"
+                    @(ViewData["ShowOutOfStock"] is bool showOutOfStock && showOutOfStock ? "checked" : "") />
+                    <label class="form-check-label" for="outOfStock">Đã hết hàng</label>
+                </div>
+
+                <!-- Nút tìm kiếm -->
+                <div class="input-group-append">
+                    <button  type="submit" class="btn btn-primary rounded-pill">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <!-- Dropdown chọn sắp xếp -->
+                <form method="get">
+                    <div class="col-md-3">
+                        <!-- Lưu lại các giá trị tìm kiếm, lọc hiện tại -->
+                        <input type="hidden" name="categoryId" value="@ViewData["categoryId"]" />
+                        <input type="hidden" name="searchTerm" value="@ViewData["searchTerm"]" />
+                        <input type="hidden" name="ShowOutOfStock" value="@(ViewData["ShowOutOfStock"])" />
+
+                        <!-- Dropdown chọn sắp xếp -->
+                        <select name="sort" class="form-select" onchange="this.form.submit()">
+                            @* Option mặc định *@
+                            <option value="" selected=@(ViewData["SortList"]?.ToString() == "" ? "selected" : "")>Mặc định</option>
+
+                            @* Option giá tăng dần *@
+                            <option value="asc" selected="@(ViewData["SortList"]?.ToString() == "asc")">Giá tăng dần</option>
+
+                            @* Option giá giảm dần *@
+                            <option value="desc" selected="@(ViewData["SortList"]?.ToString() == "desc")">Giá giảm dần</option>
+                        </select>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách sản phẩm -->
+    <table class="table table-hover table-bordered text-center align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Mã</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Hình</th>
+                <th>Mô Tả</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+                <th>Danh Mục</th>
+                <th>Ngày Tạo</th>
+                <th>Ngày Cập Nhật</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.MaSanPham</td>
+                        <td>@item.TenSanPham</td>
+                        <td>
+                            <img src="@item.HinhAnh" alt="@item.TenSanPham" class="img-thumbnail" />
+                        </td>
+                        <td>@item.MoTa</td>
+                        <td>@String.Format("{0:C}", item.Gia)</td>
+                        <td>@item.SoLuong</td>
+                        <td>@item.DanhMucSanPham?.TenDanhMuc</td>
+                        <td>@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                        <td>@item.NgayCapNhat.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div>
+                            <a asp-area="Admin" asp-action="Edit" asp-route-MaSanPham="@item.MaSanPham" class="btn btn-warning btn-sm rounded-pill">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            </div>
+                            <a asp-area="Admin" asp-action="Delete" asp-route-MaSanPham="@item.MaSanPham" class="btn btn-danger btn-sm rounded-pill">
+                                <i class="fas fa-trash-alt"></i> Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="text-danger">Không có sản phẩm nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- CSS cải tiến -->
+<style>
+    .body-create {
+        background-color: #f7f8fa; /* Màu nền nhẹ */
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #28a745;
+    }
+
+    #trolai {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        #trolai:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+    /* Cải tiến bảng sản phẩm */
+    table{
+        margin-top: 15px;
+        font-size: 14px;
+        width: 100%;
+        border-collapse: collapse;
+        display: block; /* Chuyển tbody thành block để cuộn */
+        max-height: 650px; /* Đặt chiều cao tối đa cho tbody */
+        overflow-y: auto; /* Cuộn dọc khi nội dung vượt quá chiều cao */
+    }
+
+    table th, table td {
+        padding: 12px;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #dee2e6;
+
+    }
+
+    table th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+    }
+            /* Cố định header của bảng */
+            table thead, table tbody tr {
+                display: table; /* Giữ các phần tử theo kiểu bảng */
+                width: 100%; /* Đảm bảo khớp với chiều rộng bảng */
+                table-layout: fixed; /* Cố định độ rộng các cột */
+            }
+
+        table thead {
+            position: sticky; /* Giữ cố định phần thead khi cuộn */
+            top: 0; /* Vị trí cố định của thead */
+            z-index: 1; /* Đảm bảo thead nằm trên tbody */
+        }
+
+        /* Điều chỉnh các cột để khớp */
+        table tbody td {
+            text-align: center;
+            white-space: nowrap; /* Không cho xuống dòng */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung quá dài */
+        }
+
+    table tbody tr {
+        background-color: #ffffff;
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Tô màu cho từng cột */
+    table td:nth-child(1) {
+        background-color: #f8d7da;
+    }
+
+    table td:nth-child(2) {
+        background-color: #d1ecf1;
+    }
+
+    table td:nth-child(3) {
+        background-color: #d4edda;
+    }
+
+    table td:nth-child(4) {
+        background-color: #fff3cd;
+    }
+
+    table td:nth-child(5) {
+        background-color: #f8d7da;
+    }
+
+    table td:nth-child(6) {
+        background-color: #d1ecf1;
+    }
+
+    table td:nth-child(7) {
+        background-color: #d4edda;
+    }
+
+    table td:nth-child(8) {
+        background-color: #fff3cd;
+    }
+
+    table td:nth-child(9) {
+        background-color: #f8d7da;
+    }
+
+    table td:nth-child(10) {
+        background-color: #d1ecf1;
+    }
+
+    img.img-thumbnail {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Cải tiến form tìm kiếm */
+    .input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 25px; /* Làm tròn các góc */
+        padding: 10px; /* Thêm khoảng cách bên trong */
+        font-size: 13px; /* Điều chỉnh kích thước chữ */
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 10px 12px;
+        border-radius: 25px; /* Làm nút tròn hơn */
+        font-size: 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Cải tiến các nút */
+    .btn {
+        border-radius: 25px;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-warning:hover, .btn-danger:hover {
+        opacity: 0.8;
+    }
+
+    .btn i {
+        width: 20px;
+        height: 20px;
+        margin-right: 1px;
+    }
+</style>

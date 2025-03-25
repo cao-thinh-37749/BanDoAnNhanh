@@ -1,0 +1,247 @@
+﻿    <div class="col-sm-3">
+	<div class="left-sidebar">
+		<h2>Danh Mục Sản Phẩm</h2>
+		<div class="panel-group category-products" id="accordian">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#banhmkep" data-toggle="tab">Bánh Mì Kẹp</a>
+					</h4>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#combo" data-toggle="tab">Combo Thức Ăn</a>
+					</h4>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#garan" data-toggle="tab">Gà Rán</a>
+					</h4>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#rautron" data-toggle="tab">Rau Trộn</a>
+					</h4>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#trangmieng" data-toggle="tab">Món Tráng Miệng</a>
+					</h4>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a href="#nuocuong" data-toggle="tab">Nước Uống</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-sm-9 padding-right">
+	<!--Sản phẩm nổi bậc-->
+	<div class="recommended_items">
+		<h2 class="title text-center">Sản phẩm được đề xuất</h2>
+		<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+			<div class="carousel-inner">
+				@for (int i = 0; i < Model.Count; i += 3) // Mỗi item chứa 3 sản phẩm
+				{
+					<div class="item @(i == 0 ? "active" : "")">
+						<!-- Đánh dấu item đầu tiên là active -->
+						<div class="row">
+							@for (int j = i; j < i + 3 && j < Model.Count; j++)
+							{
+								var product = Model[j];
+								<div class="col-sm-4">
+									<!-- Thay đổi để mỗi sản phẩm chiếm 1/3 chiều rộng -->
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<img style="height: 200px;" src="@Url.Content(product.HinhAnh)" alt="@product.TenSanPham" />
+												<h2>@product.Gia.ToString("C")</h2>
+												<p>@product.TenSanPham</p>
+                                                <form asp-action="Add" asp-controller="GioHang" method="post">
+                                                    <input type="hidden" name="maSanPham" value="@product.MaSanPham" />
+                                                    <button type="submit" class="btn btn-primary add-to-cart" style="color: white">
+                                                        <i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng
+                                                    </button>
+                                                </form>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+			<a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+				<i class="fa fa-angle-left"></i>
+			</a>
+			<a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+				<i class="fa fa-angle-right"></i>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="col-sm-12">
+    @* Hiển thị thông báo nếu có *@
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info" style="text-align: center; font-size:26px;">
+            @TempData["Message"]
+        </div>
+
+        <script>
+            // Tự động đóng thông báo sau 5 giây (5000 mili giây)
+            setTimeout(function () {
+                $(".alert").alert('close');
+            }, 5000); // 5000 milliseconds = 5 seconds
+        </script>
+    }
+    <div class="features_items">
+        <h2 class="title text-center">Danh Mục Sản Phẩm</h2>
+        <div class="category-tab">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs" style="text-align:center;">
+                    <li class="active"><a href="#all-products" data-toggle="tab">Tất cả sản phẩm</a></li>
+                    <li><a href="#banhmkep" data-toggle="tab">Bánh Mì Kẹp</a></li>
+                    <li><a href="#combo" data-toggle="tab">Combo</a></li>
+                    <li><a href="#garan" data-toggle="tab">Gà Rán</a></li>
+                    <li><a href="#rautron" data-toggle="tab">Rau Trộn</a></li>
+                    <li><a href="#trangmieng" data-toggle="tab">Món Tráng Miệng</a></li>
+                    <li><a href="#nuocuong" data-toggle="tab">Nước Uống</a></li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <!-- Tab Tất cả sản phẩm -->
+                <div class="tab-pane fade in active" id="all-products">
+                    @foreach (var product in Model)
+                    {
+                        @* Chèn mã sản phẩm ở đây *@
+                        <div class="col-sm-3">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        <img style="height: 200px;" src="@Url.Content(product.HinhAnh)" alt="@product.TenSanPham" />
+                                        <h2>@product.Gia.ToString("C")</h2>
+                                        <p>@product.TenSanPham</p>
+                                        <form asp-action="Add" asp-controller="GioHang" method="post">
+                                            <input type="hidden" name="maSanPham" value="@product.MaSanPham" />
+                                            <button type="submit" class="btn btn-primary add-to-cart" style="color: white">
+                                                <i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="choose">
+                                    <ul class="nav nav-pills nav-justified">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="document.getElementById('add-to-favorites-@product.MaSanPham').submit();" style="background: red; color: white;">
+                                                <i class="fa fa-heart"></i> Yêu Thích
+                                            </a>
+                                            <form id="add-to-favorites-@product.MaSanPham" action="@Url.Action("Add", "SanPhamYeuThich")" method="post" style="display: none;">
+                                                <input type="hidden" name="maSanPham" value="@product.MaSanPham" />
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Details", "Home", new { MaSanPham = product.MaSanPham })">
+                                                <i class="fa fa-plus-square"></i> Chi Tiết
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Tab theo danh mục -->
+                @foreach (var category in new[]
+                {
+                new { Id = 1, Name = "banhmkep" },
+                new { Id = 2, Name = "combo" },
+                new { Id = 3, Name = "garan" },
+                new { Id = 4, Name = "rautron" },
+                new { Id = 5, Name = "trangmieng" },
+                new { Id = 6, Name = "nuocuong" }
+                })
+                {
+                    <div class="tab-pane fade @(ViewBag.CurrentCategoryId == category.Id ? "in active" : "")" id="@category.Name">
+                        @foreach (var product in Model)
+                        {
+                            // Kiểm tra sản phẩm có thuộc danh mục hiện tại hay không
+                            if (product.DanhMuc == category.Id || category.Name == "all-products")
+                            {
+                                <div class="col-sm-4">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img style="height: 200px;" src="@Url.Content(product.HinhAnh)" alt="@product.TenSanPham" />
+                                                <h2>@product.Gia.ToString("C")</h2>
+                                                <p>@product.TenSanPham</p>
+                                                <a href="@Url.Action("Add", "GioHang", new { maSanPham = product.MaSanPham })" class="btn btn-default add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="choose">
+                                            <ul class="nav nav-pills nav-justified">
+                                                <li>
+                                                    <a href="javascript:void(0);" onclick="document.getElementById('add-to-favorites-@product.MaSanPham').submit();">
+                                                        <i class="fa fa-heart"></i> Yêu Thích
+                                                    </a>
+                                                    <form id="add-to-favorites-@product.MaSanPham" action="@Url.Action("Add", "SanPhamYeuThich")" method="post" style="display: none;">
+                                                        <input type="hidden" name="maSanPham" value="@product.MaSanPham" />
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Details", "Home", new { MaSanPham = product.MaSanPham })">
+                                                        <i class="fa fa-plus-square"></i> Chi Tiết
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+
+                <div class="clearfix"></div>
+                <!-- Phân trang -->
+                <div class="text-center">
+                    @{
+                        var currentCategoryId = ViewBag.CurrentCategoryId;
+
+                        var currentMinPrice = ViewBag.CurrentMinPrice;
+
+                        var currentMaxPrice = ViewBag.CurrentMaxPrice;
+
+                        int totalPages = (int)Math.Ceiling((double)ViewBag.TotalProducts / 6);
+                    }
+                    <ul class="pagination">
+                        @for (int i = 1; i <= totalPages; i++)
+
+                        {
+                            <li class="@(ViewBag.CurrentPage == i ? "active" : "")">
+                                <a href="@Url.Action("Index", new { categoryId = currentCategoryId, minPrice = currentMinPrice, maxPrice = currentMaxPrice, page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

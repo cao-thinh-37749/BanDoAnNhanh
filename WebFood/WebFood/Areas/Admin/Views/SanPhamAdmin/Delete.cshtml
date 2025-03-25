@@ -1,0 +1,171 @@
+﻿@model WebFood.Models.SanPham
+
+@{
+    ViewData["Title"] = "Xóa Sản Phẩm";
+    Layout = "_LayoutAdmin";
+}
+
+<h1 class="text-center text-danger">Xóa Sản Phẩm</h1>
+
+<!-- Nút quay lại -->
+<div class="text-left mb-4">
+    <a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })" class="btn btn-outline-secondary btn-lg">
+        <i class="fa fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<hr style="margin:1.5rem" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <!-- Hình ảnh sản phẩm -->
+        <div class="col-md-4 text-center">
+            <div class="avatar-preview mb-3">
+                <img id="previewImage" src="@Model.HinhAnh" alt="Ảnh Sản Phẩm" class="rounded-circle shadow" />
+            </div>
+            <label class="font-weight-bold image-label text-muted">Ảnh Sản Phẩm</label>
+        </div>
+
+        <!-- Thông tin sản phẩm -->
+        <div class="col-md-8">
+            <form asp-action="Delete" method="post">
+                @Html.HiddenFor(model => model.MaSanPham)
+
+                <!-- Thông tin sản phẩm -->
+                <div class="product-details">
+                    <div class="form-group">
+                        <label class="control-label text-primary">Tên Sản Phẩm:</label>
+                        <p class="form-control-static font-weight-bold">@Model.TenSanPham</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label text-primary">Giá:</label>
+                        <p class="form-control-static text-success">@String.Format("{0:C}", @Model.Gia)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label text-primary">Số Lượng:</label>
+                        <p class="form-control-static">@Model.SoLuong</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label text-primary">Danh Mục:</label>
+                        <p class="form-control-static">@Model.DanhMuc</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label text-primary">Mô Tả:</label>
+                        <p class="form-control-static text-justify">@Model.MoTa</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label text-primary">Ngày Tạo:</label>
+                        <p class="form-control-static text-justify">@Model.NgayTao</p>
+                    </div>
+
+                </div>
+
+                <!-- Nút hành động -->
+                <div class="form-group text-center mt-4">
+                    <input type="submit" value="Xóa" class="btn btn-danger btn-lg shadow" />
+                    <a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })" class="btn btn-secondary btn-lg shadow">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .body-create {
+        background-color: #f7f8fa; /* Màu nền nhẹ */
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    h1.text-center {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-transform: uppercase;
+        margin: 1.5rem;
+        letter-spacing: 2px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #28a745;
+    }
+
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        margin-left: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+    .avatar-preview {
+        width: 200px;
+        height: 200px;
+        border: 4px solid #dc3545;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #f8f9fa;
+        margin: 0 auto;
+    }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .image-label {
+        font-size: 1.1rem;
+        margin-top: 10px;
+    }
+
+    .product-details .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control-static {
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+        color: #333;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>

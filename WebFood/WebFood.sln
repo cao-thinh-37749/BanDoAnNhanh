@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFood", "WebFood\WebFood.csproj", "{245FBACF-EBAE-42F6-A44E-DC8CD7C83813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFood_API", "WebFood_API\WebFood_API.csproj", "{9BF19C5A-FD77-49E0-863F-72BF6CA84450}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{245FBACF-EBAE-42F6-A44E-DC8CD7C83813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{245FBACF-EBAE-42F6-A44E-DC8CD7C83813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{245FBACF-EBAE-42F6-A44E-DC8CD7C83813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{245FBACF-EBAE-42F6-A44E-DC8CD7C83813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BF19C5A-FD77-49E0-863F-72BF6CA84450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BF19C5A-FD77-49E0-863F-72BF6CA84450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BF19C5A-FD77-49E0-863F-72BF6CA84450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BF19C5A-FD77-49E0-863F-72BF6CA84450}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8D1B1E0-649A-43D2-8091-EBCF4F67A398}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,209 @@
+﻿@model WebFood.Models.KhachHang
+
+@{
+    Layout = null; // Không sử dụng layout
+}
+
+<div class="login-container">
+    <h2>Đăng Nhập</h2>
+
+    <form asp-action="Login" method="post">
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" asp-for="Email" class="form-control" placeholder="Nhập email" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="MatKhau">Mật khẩu:</label>
+            <input type="password" asp-for="PasswordHash" class="form-control" placeholder="Nhập mật khẩu" required />
+            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+        </div>
+
+        <div class="validation-summary @(!ViewData.ModelState.IsValid ? "visible" : "")">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div style="text-align: left; margin-bottom: 7px;">
+            <a href="@Url.Action("QuenMatKhau", "Login")">Quên mật khẩu</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+    </form>
+    <hr />
+
+    <form action="@Url.Action("LoginGoogle", "Login")" method="get">
+        <button type="submit" class="btn btn-outline-primary d-flex align-items-center google-btn">
+            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo" class="me-2" />
+            Đăng nhập bằng Google
+        </button>
+    </form>
+
+    <div class="footer-links">
+        <a href="@Url.Action("Index","Home")">Quay lại trang chủ</a> <a> | </a> <a href="@Url.Action("Register", "Login")">Đăng ký</a> <a> | </a> <a href="@Url.Action("KhoiPhuc", "Login")">Khôi phục Tài khoản</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".form-control").on("input", function () {
+            // Ẩn lỗi liên quan đến trường nhập hiện tại
+            $(this).next(".text-danger").text("");
+
+            // Ẩn thông báo lỗi tổng quát
+            $(".validation-summary").removeClass("visible").empty();
+        });
+    });
+    $('#adminChoiceModal').modal('hide');
+</script>
+
+@if (ViewBag.ShowAdminChoiceModal != null && (bool)ViewBag.ShowAdminChoiceModal)
+{
+    <!-- Modal lựa chọn giao diện -->
+       <div class="modal" id="adminChoiceModal" tabindex="-1" role="dialog" aria-labelledby="adminChoiceModalLabel" aria-hidden="true" style="display: block; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; display: flex; align-items: center; justify-content: center;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="adminChoiceModalLabel">Bạn đã đăng nhập tài khoản Admin!</h3>
+                    </div>                     
+                    <div class="modal-body">
+                        <p>Bạn muốn vào giao diện nào?</p>
+                        <a href="@Url.Action("Index", "HomeAdmin", new { area = "Admin" })" class="btn btn-primary">Giao diện Quản lý</a>
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Giao diện Khách hàng</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+}
+<style>
+
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    .btn-primary {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #555;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+
+        .google-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+    .footer-links {
+        margin-top: 20px;
+    }
+
+        .footer-links a {
+            color: #007bff;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .footer-links a:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+
+    .validation-summary-errors {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+        .validation-summary-errors ul {
+            padding: 0;
+            list-style-type: none;
+            margin: 0;
+        }
+
+        .validation-summary-errors li {
+            margin-bottom: 5px;
+        }
+</style>

@@ -1,0 +1,142 @@
+﻿@model List<WebFood.Models.CartItemViewModel>
+
+@{
+    ViewBag.Title = "Thanh Toán Sản Phẩm";
+}
+
+<h2 class="text-center mb-4">Thanh Toán Sản Phẩm</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="text-left mt-4">
+    <a href="@Url.Action("Index", "GioHang")" class="btn btn-back-cart">
+        <i class="fas fa-arrow-left"></i> Quay Lại Giỏ Hàng
+    </a>
+</div>
+
+<div class="card shadow-sm p-4">
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá</th>
+                <th>Tổng Tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.HinhAnh" alt="@item.TenSanPham" class="img-thumbnail" width="70" /></td>
+                    <td>@item.TenSanPham</td>
+                    <td>@item.SoLuong</td>
+                    <td>@item.Gia.ToString("C")</td>
+                    <td>@item.TongTien.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="col-sm-12 text-right mt-3">
+        <span class="total-amount-label">Tổng Tiền:</span>
+        <span class="total-amount">@Model.Sum(x => x.SoLuong * x.Gia).ToString("C")</span>
+    </div>
+
+    <div class="col-sm-12 text-right mt-3">
+        <form method="post" asp-action="ThanhToanMotSanPhamPost" asp-route-maSanPham="@Model.FirstOrDefault()?.MaSanPham" asp-route-Id="@ViewBag.Id">
+            <button type="submit" class="btn btn-success btn-lg w-50">Thanh Toán Sản Phẩm</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Nút quay lại giỏ hàng */
+    .btn-back-cart {
+        font-size: 1rem; /* Kích thước chữ nhỏ hơn */
+        padding: 8px 20px; /* Padding nhẹ để nút không quá lớn */
+        background-color: #6c757d; /* Màu xanh dịu mắt */
+        color: white; /* Màu chữ trắng */
+        border-radius: 5px; /* Bo góc nhẹ */
+        border: none; /* Không có viền */
+        display: inline-flex; /* Để nút và icon nằm ngang */
+        align-items: center; /* Căn chỉnh icon và chữ */
+        text-decoration: none; /* Loại bỏ gạch chân */
+        cursor: pointer; /* Chỉ thị con trỏ tay khi hover */
+        margin-bottom: 5px;
+    }
+
+        /* Biểu tượng mũi tên */
+        .btn-back-cart i {
+            margin-right: 8px; /* Khoảng cách giữa biểu tượng và chữ */
+            font-size: 1.2rem; /* Kích thước icon */
+        }
+
+    h2.text-center {
+        font-size: 2.5rem; /* Kích thước chữ lớn */
+        font-weight: bold; /* Làm đậm tiêu đề */
+        color: #2c3e50; /* Màu sắc tối, dễ nhìn */
+        text-transform: uppercase; /* Chữ in hoa */
+        margin-bottom: 1.5rem; /* Khoảng cách phía dưới */
+        letter-spacing: 2px; /* Tăng khoảng cách giữa các chữ */
+        font-family: 'Arial', sans-serif; /* Font chữ hiện đại */
+        text-align: center; /* Căn giữa */
+        padding: 10px 0; /* Khoảng cách trên và dưới */
+        border-bottom: 2px solid #e74c3c; /* Thêm đường viền dưới màu đỏ */
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .card {
+        margin: auto;
+    }
+
+    .img-thumbnail {
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    .btn-close {
+        font-size: 1.2em;
+    }
+
+    .btn-lg {
+        font-size: 1.1rem;
+    }
+
+    .btn-primary, .btn-success {
+        font-weight: bold;
+    }
+
+    /* Định dạng tổng tiền */
+    .col-sm-12.text-right.mt-3 {
+        font-size: 25px; /* Kích thước chữ vừa phải */
+        font-weight: bold; /* Chữ đậm để nổi bật */
+        color: #333; /* Màu chữ tối để dễ đọc */
+        padding-right: 20px; /* Khoảng cách với viền phải */
+        margin: 10px; /* Khoảng cách với phần tử trên */
+        margin-bottom: 10px;
+    }
+
+    /* Định dạng tổng tiền */
+    .total-amount {
+        font-size: 25px; /* Kích thước chữ lớn hơn */
+        font-weight: bold; /* Chữ đậm cho giá trị tổng tiền */
+        color: black; /* Màu xanh lá cây tươi sáng */
+    }
+
+</style>
